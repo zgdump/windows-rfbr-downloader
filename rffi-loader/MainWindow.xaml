@@ -34,7 +34,7 @@
         <StackPanel MaxWidth="175" MaxHeight="175" HorizontalAlignment="Center"
                      VerticalAlignment="Center" Grid.Row="2">
 
-            <TextBlock x:Name="TextLoadStatus" Text="Загрузка..." TextAlignment="Center" Padding="16"/>
+            <TextBlock x:Name="TextLoadStatus" TextWrapping="Wrap"  TextAlignment="Center" Padding="16"/>
             <ProgressBar x:Name="VisualProgress" IsIndeterminate="True"/>
 
         </StackPanel>
