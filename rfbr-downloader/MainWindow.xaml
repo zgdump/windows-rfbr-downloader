@@ -1,9 +1,9 @@
-﻿<Window x:Class="rffi_loader.MainWindow"
+﻿<Window x:Class="RFBRDownloader.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:rffi_loader"
+        xmlns:local="clr-namespace:RFBRDownloader"
         mc:Ignorable="d"
         Title="Загрузка книг с РФФИ" Height="340" Width="240">
     <Grid Margin="8">

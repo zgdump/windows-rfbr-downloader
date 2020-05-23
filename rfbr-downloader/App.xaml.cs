@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace rffi_loader
+namespace RFBRDownloader
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml

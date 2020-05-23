@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace rffi_loader
+namespace RFBRDownloader
 {
     public partial class MainWindow : Window
     {
