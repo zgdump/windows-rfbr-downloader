@@ -35,6 +35,14 @@ namespace RFBRDownloader
             ButtonDownload.IsEnabled = false;
         }
 
+        private void InitializeProgress(int max)
+        {
+
+            Progress.IsIndeterminate = false;
+            Progress.Maximum = max;
+            Progress.Minimum = 0;
+        }
+
         #endregion
 
         private async void ButtonDownload_Click(object sender, RoutedEventArgs e)
@@ -55,6 +63,13 @@ namespace RFBRDownloader
             }
 
             StateLoading();
+            InitializeProgress(pagesCount);
+
+            var downloadProgress = new Progress<int>((value) =>
+            {
+                TextLoadStatus.Text = $"Загружено {value} из {pagesCount}";
+                Progress.Value = value;
+            });
 
             await Task.Run(() =>
             {
@@ -78,6 +93,8 @@ namespace RFBRDownloader
                         pageJpgPath = Path.Combine(tempDirPath, $"{i + 1}.jpg");
 
                         client.DownloadFile(pageUrl, pagePngPath);
+
+                        ((IProgress<int>)downloadProgress).Report(i + 1);
 
                         ConvertPngToJpg(pagePngPath, pageJpgPath);
                         AppendJpgToDocument(document, pageJpgPath);
