@@ -1,0 +1,47 @@
+﻿<Window x:Class="rffi_loader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:rffi_loader"
+        mc:Ignorable="d"
+        Title="Загрузка книг с РФФИ" Height="340" Width="240">
+    <Grid Margin="8">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Книги с РФФИ" FontSize="18" FontWeight="Bold" Padding="4" Grid.Row="0"/>
+
+        <GroupBox Header="Данные" Grid.Row="1">
+            <StackPanel VerticalAlignment="Center">
+                
+                <TextBlock Text="Ссылка" Padding="0,4,0,4"/>
+                <TextBox x:Name="InputUrl"/>
+
+                <Viewbox Height="4" />
+
+                <TextBlock Text="Количество страниц" Padding="0,4,0,4" />
+                <TextBox x:Name="InputPagesCount"/>
+                
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel MaxWidth="175" MaxHeight="175" HorizontalAlignment="Center"
+                     VerticalAlignment="Center" Grid.Row="2">
+
+            <TextBlock x:Name="TextLoadStatus" Text="Загрузка..." TextAlignment="Center" Padding="16"/>
+            <ProgressBar x:Name="VisualProgress" IsIndeterminate="True"/>
+
+        </StackPanel>
+
+        <Button x:Name="ButtonDownload" Grid.Row="3" Margin="4" Width="Auto" Click="ButtonDownload_Click">
+            <TextBlock><Bold>Скачать</Bold></TextBlock>
+        </Button>
+
+    </Grid>
+</Window>
