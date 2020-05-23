@@ -47,10 +47,15 @@ namespace RFBRDownloader
 
         private async void ButtonDownload_Click(object sender, RoutedEventArgs e)
         {
-            string bookId;
+            string name;
+            string id;
             int pagesCount;
 
-            if (!TryToGetBookId(out bookId))
+            name = IsValidFilename(InputName.Text) ?
+                $"{InputName.Text}.pdf" :
+                "Книга с РФФИ.pdf";
+
+            if (!TryToGetBookId(out id))
             {
                 ShowError("Ошибка! Введён некорректный url адрес. Пример: rfbr.ru/rffi/ru/books/o_36464");
                 return;
@@ -79,7 +84,7 @@ namespace RFBRDownloader
                 string tempDirPath = GetTemporaryDirectory();
 
                 Document document = new Document();
-                using (var stream = new FileStream("Book.pdf", FileMode.Create, FileAccess.Write, FileShare.None))
+                using (var stream = new FileStream(name, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     PdfWriter.GetInstance(document, stream);
                     document.Open();
@@ -88,7 +93,7 @@ namespace RFBRDownloader
 
                     for (int i = 0; i < pagesCount; i++)
                     {
-                        pageUrl = $"{URI_PAGE_LINK_PREFIX}{bookId}&page={i}";
+                        pageUrl = $"{URI_PAGE_LINK_PREFIX}{id}&page={i}";
                         pagePngPath = Path.Combine(tempDirPath, $"{i + 1}.png");
                         pageJpgPath = Path.Combine(tempDirPath, $"{i + 1}.jpg");
 
@@ -107,6 +112,11 @@ namespace RFBRDownloader
 
             ShowInfo("Загрузка завершена!");
             StateInitial();
+        }
+
+        private bool IsValidFilename(string filename)
+        {
+            return !string.IsNullOrEmpty(filename) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
         }
 
         private bool TryToGetBookId(out string bookId)
