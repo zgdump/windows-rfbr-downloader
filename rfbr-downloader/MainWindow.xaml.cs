@@ -24,86 +24,18 @@ namespace RFBRDownloader
         private void StateInitial()
         {
             TextLoadStatus.Text = "Введите данные и нажмите \"Скачать\"";
-            VisualProgress.Visibility = Visibility.Collapsed;
+            Progress.Visibility = Visibility.Collapsed;
             ButtonDownload.IsEnabled = true;
         }
 
         private void StateLoading()
         {
             TextLoadStatus.Text = "Загрузка...";
-            VisualProgress.Visibility = Visibility.Visible;
+            Progress.Visibility = Visibility.Visible;
             ButtonDownload.IsEnabled = false;
         }
 
         #endregion
-
-        private bool TryToGetBookId(out string bookId)
-        {
-            var regex = new Regex(@"books\/o_(\d+)");
-            var match = regex.Match(InputUrl.Text);
-
-            if (match.Groups.Count != 2)
-            {
-                bookId = "";
-                return false;
-            }
-            else
-            {
-                bookId = match.Groups[1].ToString();
-                return true;
-            }
-        }
-
-        private bool TryToGetPagesCount(out int pagesCount)
-        {
-            return int.TryParse(InputPagesCount.Text, out pagesCount);
-        }
-
-        public string GetTemporaryDirectory()
-        {
-            string tempDirectory = System.IO.Path.Combine(System.IO.Path.GetTempPath(), System.IO.Path.GetRandomFileName());
-            Directory.CreateDirectory(tempDirectory);
-            return tempDirectory;
-        }
-
-        private void ShowError(string message)
-        {
-            MessageBox.Show(
-                message,
-                "",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error
-            );
-        }
-
-        private void ShowInfo(string message)
-        {
-            MessageBox.Show(
-                message,
-                "",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information
-            );
-        }
-
-        private void ConvertPngToJpg(string pngPath, string jpgPath)
-        {
-            System.Drawing.Image img = System.Drawing.Image.FromFile(pngPath);
-            img.Save(jpgPath, System.Drawing.Imaging.ImageFormat.Jpeg);
-        }
-
-        private void AppendJpgToDocument(Document document, string jpgPath)
-        {
-            using (var imageStream = new FileStream(jpgPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var pageImage = Image.GetInstance(imageStream);
-
-                pageImage.ScalePercent(800 / pageImage.Height * 100);
-
-                document.Add(pageImage);
-                document.NewPage();
-            }
-        }
 
         private async void ButtonDownload_Click(object sender, RoutedEventArgs e)
         {
@@ -141,7 +73,7 @@ namespace RFBRDownloader
 
                     for (int i = 0; i < pagesCount; i++)
                     {
-                        pageUrl = URI_PAGE_LINK_PREFIX + bookId + "&page=" + i;
+                        pageUrl = $"{URI_PAGE_LINK_PREFIX}{bookId}&page={i}";
                         pagePngPath = Path.Combine(tempDirPath, $"{i + 1}.png");
                         pageJpgPath = Path.Combine(tempDirPath, $"{i + 1}.jpg");
 
@@ -158,6 +90,74 @@ namespace RFBRDownloader
 
             ShowInfo("Загрузка завершена!");
             StateInitial();
+        }
+
+        private bool TryToGetBookId(out string bookId)
+        {
+            var regex = new Regex(@"books\/o_(\d+)");
+            var match = regex.Match(InputUrl.Text);
+
+            if (match.Groups.Count != 2)
+            {
+                bookId = "";
+                return false;
+            }
+            else
+            {
+                bookId = match.Groups[1].ToString();
+                return true;
+            }
+        }
+
+        private bool TryToGetPagesCount(out int pagesCount)
+        {
+            return int.TryParse(InputPagesCount.Text, out pagesCount);
+        }
+
+        private void ShowError(string message)
+        {
+            MessageBox.Show(
+                message,
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error
+            );
+        }
+
+        private void ShowInfo(string message)
+        {
+            MessageBox.Show(
+                message,
+                "",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information
+            );
+        }
+
+        private string GetTemporaryDirectory()
+        {
+            string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            Directory.CreateDirectory(tempDirectory);
+            return tempDirectory;
+        }
+
+        private void ConvertPngToJpg(string pngPath, string jpgPath)
+        {
+            System.Drawing.Image img = System.Drawing.Image.FromFile(pngPath);
+            img.Save(jpgPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+        }
+
+        private void AppendJpgToDocument(Document document, string jpgPath)
+        {
+            using (var imageStream = new FileStream(jpgPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var pageImage = Image.GetInstance(imageStream);
+
+                pageImage.ScalePercent(800 / pageImage.Height * 100);
+
+                document.Add(pageImage);
+                document.NewPage();
+            }
         }
     }
 }
