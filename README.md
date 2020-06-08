@@ -1,6 +1,6 @@
 # Скачивание книг с РФФИ
 
-<img style="width:25%" src="preview.jpg" />
+<img src="preview.jpg" alt="drawing" width="148.2" width="259.5" />
 
 Программа для загрузки книг с [РФФИ](https://www.rfbr.ru).
 
